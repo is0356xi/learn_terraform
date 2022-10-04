@@ -3,7 +3,7 @@ resource azurerm_subnet sn{
     for_each = var.sn_params
 
     name = "${local.env}_${each.value.name}"
-    resource_group_name = (each.value.rg_name == "")? var.dev_conf.rg_name : each.value.rg_name
+    resource_group_name = (each.value.rg_name == "")? local.conf.rg_name : each.value.rg_name
     address_prefixes = each.value.addr_prefix
     # 同じ階層にあるのでoutput無しでazurerm_virtual_networkを参照可能
     virtual_network_name = azurerm_virtual_network.vn.name
