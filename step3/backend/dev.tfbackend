@@ -1,0 +1,4 @@
+resource_group_name  = "tf_dev"
+storage_account_name = "is0356xi"
+container_name       = "terraform-tfstate"
+key                  = "terraform.tfstate"
