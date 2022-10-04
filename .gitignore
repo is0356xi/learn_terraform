@@ -4,3 +4,4 @@
 *.exe
 *.hcl
 step2/terraform.tfstate.json
+*.backup
