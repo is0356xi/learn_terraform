@@ -6,3 +6,4 @@
 step2/terraform.tfstate.json
 *.backup
 *.terraform
+*.info

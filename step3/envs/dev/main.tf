@@ -8,13 +8,13 @@ terraform {
     }
 
     # tfstateの保存・管理を行う場所
-    backend "azurerm" {
-        /*
-            BLOBストレージの情報を<環境名>.tfbackendに記述
-            init時にバックエンドファイルを指定することで環境を指定できる
-            terraform init -reconfigure -backend-config ../../backend/<環境名>.tfbackend
-        */
-    }
+    # backend "azurerm" {
+    #     /*
+    #         BLOBストレージの情報を<環境名>.tfbackendに記述
+    #         init時にバックエンドファイルを指定することで環境を指定できる
+    #         terraform init -reconfigure -backend-config ../../backend/<環境名>.tfbackend
+    #     */
+    # }
     
 
     required_version = ">= 1.1.0"
@@ -26,14 +26,14 @@ provider "azurerm"{
 
 # dev環境固有の変数を読み込み
 module dev{
-    source = "../modules/config"
+    source = "../../modules/config"
 }
 
 
 # ネットワークリソースの作成
 module network{
     # networkモジュールの呼び出し
-    source = "../modules/network"
+    source = "../../modules/network"
 
     env = var.env                  # 環境に関する情報をモジュールへ渡す
     dev_conf = module.dev.config   # dev_confという変数名で"../config"の値をnetworkモジュールに渡す
