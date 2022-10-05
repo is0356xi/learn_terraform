@@ -1,6 +1,5 @@
 # 呼び出し時に渡される引数を定義
 variable env {}
-variable dev_conf {}
 
 # 仮想ネットワークのパラメータ
 variable vn_params{

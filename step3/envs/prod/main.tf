@@ -24,13 +24,12 @@ provider "azurerm"{
     features {}
 }
 
-
 # ネットワークリソースの作成
 module network{
     # networkモジュールの呼び出し
     source = "../../modules/network"
     # 環境に関する情報をモジュールへ渡す
-    env = var.env                      
+    env = var.env                  
+    
 }
-
 
