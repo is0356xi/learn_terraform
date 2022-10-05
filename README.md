@@ -60,3 +60,18 @@ resource "azurerm_resource_group" "xxx" {
   - ```resource "xx" "yy"{}```の状態で```terraform plan```する
 - それぞれのリソースが依存関係にあるので、そのあたりをどのようにコードで表現するか
 - ついでにscriptsにスクリプトファイルまとめた
+
+
+### 3-2
+**Todo**
+- NIC×2、仮想マシン2台を作成する
+
+**メモ**
+- Module開発手順
+  - moduleディレクトリ下に作成したいモジュールのフォルダを作成
+  - その配下に```xxx.tf```を作成する
+  - ルートモジュールで読み込み ```module xxx{source = module/xxx}```
+  - ```resource "xx" "yy"{}```の状態で```terraform plan```する
+  - エラーで表示された変数を```xxx.tf```と同じ階層の```xxx_vars.tf```に書き出す
+  - xxx.tf側でxxx_vars.tfの内容を参照する
+  - エラーがなくなるまで```terraform plan```でデバッグ

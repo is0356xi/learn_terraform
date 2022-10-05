@@ -1,6 +1,12 @@
 # 呼び出し時に渡される引数を定義
 variable env {}
 
+
+/*
+    ""で初期化されている変数　　→　環境固有の変数を読み込む
+    nullで初期化されている変数　→　依存リソース作成後に格納される
+*/
+
 # 仮想ネットワークのパラメータ
 variable vn_params{
     default = {
@@ -25,6 +31,34 @@ variable sn_params{
             rg_name = ""
             addr_prefix = ["10.0.1.0/24"]
             vn_name = null # 仮想ネットワーク作成後に値が決まるためnullに設定
+        }
+    }
+}
+
+
+# ネットワークインタフェースのパラメータ
+variable nic_params{
+    default = {
+        nic1 = {
+            name = "nic1"
+            rg_name = ""
+            location = ""
+            ip_conf = {
+                name = "ipconfig1"
+                pip_alloc = "Dynamic"
+                subnet_id = null
+            }
+        },
+
+        nic2 = {
+            name = "nic2"
+            rg_name = ""
+            location = ""
+            ip_conf = {
+                name = "ipconfig2"
+                pip_alloc = "Dynamic"
+                subnet_id = null
+            }
         }
     }
 }
