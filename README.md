@@ -68,10 +68,38 @@ resource "azurerm_resource_group" "xxx" {
 
 **メモ**
 - Module開発手順
-  - moduleディレクトリ下に作成したいモジュールのフォルダを作成
-  - その配下に```xxx.tf```を作成する
-  - ルートモジュールで読み込み ```module xxx{source = module/xxx}```
-  - ```resource "xx" "yy"{}```の状態で```terraform plan```する
-  - エラーで表示された変数を```xxx.tf```と同じ階層の```xxx_vars.tf```に書き出す
-  - xxx.tf側でxxx_vars.tfの内容を参照する
-  - エラーがなくなるまで```terraform plan```でデバッグ
+  - 正攻法 
+    - Terraform Registyを確認して、必要な引数などをうめていく
+  - 邪道
+    - moduleディレクトリ下に作成したいモジュールのフォルダを作成
+    - その配下に```xxx.tf```を作成する
+    - ルートモジュールで読み込み ```module xxx{source = module/xxx}```
+    - ```resource "xx" "yy"{}```の状態で```terraform plan```する
+    - エラーで表示された変数を```xxx.tf```と同じ階層の```xxx_vars.tf```に書き出す
+    - xxx.tf側でxxx_vars.tfの内容を参照する
+    - エラーがなくなるまで```terraform plan```でデバッグ
+
+
+### 3-3
+**Todo**
+- UDR(user defined route)、NSG(netwrok security group)を作成する
+- Data Sourceを利用して、既存リソースを取得する
+- 取得した既存リソースにUDR, NSGをアタッチする
+
+**メモ**
+- networkモジュールのサブモジュールとしてUDR,NSGを作成
+- 既存リソースの取得について参考情報
+  - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resources 
+- 多重階層のループ処理にはコツがいる
+  - https://yamavlog.com/gcp-terraform-multiple-loops/ 
+- マップ(key=value形式)のリストの各要素をindexで指定したい場合にはvaluesを使う
+  - https://www.terraform.io/language/functions/values
+  
+```:
+> values({a=3, c=2, d=1})
+# key=valueのvalueを取り出してリストに変換
+[3,2,1,]
+```
+
+
+- 既存のサブネットは```data azurerm_subnet```で取得する
