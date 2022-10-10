@@ -14,7 +14,14 @@ data azurerm_resources type {
     }
 }
 
+data azurerm_resources type_notag {
+    type = var.type
+}
+
 output resources{
-    # value = data.azurerm_resources.rg.resources
-    value = data.azurerm_resources.type.resources
+    value = {
+        rg_tag      = data.azurerm_resources.rg.resources
+        type_tag    = data.azurerm_resources.type.resources
+        type_notag  = data.azurerm_resources.type_notag.resources
+    }
 }

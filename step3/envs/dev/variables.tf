@@ -5,7 +5,7 @@ variable env {
     name = "dev"
     # dev環境の既定値
     config = {
-      rg_name  = "tf_dev"
+      rg_name  = "dev_rg"
       location = "japaneast"
     }
   }
@@ -24,8 +24,9 @@ variable exist{
 
     # 指定リソースタイプのリソースを取得する際に使用
     type = {
-      vnet = "Microsoft.Network/virtualNetworks"
-      nic = "Microsoft.Network/networkInterfaces"
+      vnet    = "Microsoft.Network/virtualNetworks"
+      nic     = "Microsoft.Network/networkInterfaces"
+      subnet  = "Microsoft.Network/virtualNetworks/subnets"
     }
 
     # タグでフィルターする際に使用

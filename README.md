@@ -100,3 +100,6 @@ resource "azurerm_resource_group" "xxx" {
 # key=valueのvalueを取り出してリストに変換
 [3,2,1,]
 ```
+
+
+- 既存のサブネットは```data azurerm_subnet```で取得する

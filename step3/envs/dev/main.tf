@@ -25,7 +25,7 @@ provider "azurerm" {
 }
 
 
-# ネットワークリソースの作成
+# 基本的なネットワークリソースの作成
 module "network" {
   # networkモジュールの呼び出し
   source = "../../modules/network"
@@ -43,9 +43,16 @@ module "network" {
 # }
 
 
-# ネットワークセキュリティグループの作成
-module nsg{
-  source = "../../modules/network/nsg"
+# # ネットワークセキュリティグループの作成
+# module nsg{
+#   source = "../../modules/network/nsg"
+#   env = var.env
+# }
+
+
+# # ユーザ定義ルートの作成
+module udr{
+  source = "../../modules/network/udr"
   env = var.env
 }
 
@@ -53,6 +60,7 @@ module nsg{
 
 
 #####  デバッグ用  ############
+
 # 既存リソースの取得モジュール（デバッグ用）
 # module get_existing_resources{
 #   source = "../../modules/get_existing_resource"
@@ -62,9 +70,10 @@ module nsg{
 
 #   # 既存のリソースグループ内のリソースを取得したい場合
 #   rg_name = (var.exist.rg_name == "") ? "tf_${var.env.name}" : var.exist.rg_name 
+#   # rg_name = "none"
 
 #   # 既存の仮想ネットワークを取得したい場合
-#   type = var.exist.type.nic
+#   type = var.exist.type.subnet
 
 #   # タグでフィルターしたい場合
 #   tag = {
@@ -74,5 +83,5 @@ module nsg{
 # }
 
 # output exist_resource{
-#   value = module.get_existing_resources.resources[0].id
+#   value = module.get_existing_resources
 # }

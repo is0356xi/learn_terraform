@@ -40,11 +40,13 @@ resource azurerm_network_security_group nsg{
 
 # NSGをNICにアタッチ (NICのIDを取得した後、各NICにNSGを割り当てる)
 module get_nic{
+    # 作成済みのリソースを取得する
     source = "../../get_existing_resource"
 
+    # typeとtagを使用してNICを取得する
     env     = var.env
     rg_name = var.exist.rg_name
-    type    = var.exist.type
+    type    = var.exist.type  
     tag     = {
         key   = var.exist.tag.key
         value = var.exist.tag.value
@@ -55,6 +57,6 @@ module get_nic{
 resource azurerm_network_interface_security_group_association nic_nsg{
     count = length(azurerm_network_security_group.nsg)
 
-    network_interface_id      = module.get_nic.resources[count.index].id
+    network_interface_id      = module.get_nic.type_tag.resources[count.index].id
     network_security_group_id = azurerm_network_security_group.nsg[count.index].id
 }
