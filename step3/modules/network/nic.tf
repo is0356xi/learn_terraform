@@ -2,7 +2,7 @@ resource azurerm_network_interface nic{
     for_each = var.nic_params
 
     name = each.value.name
-    resource_group_name = (each.value.rg_name == "")? local.env_params.rg_name : each.value.rg_name
+    resource_group_name = (each.value.rg_name == "") ? local.env_params.rg_name : each.value.rg_name
     location = local.env_params.location
 
     
@@ -16,6 +16,10 @@ resource azurerm_network_interface nic{
                 index(keys(var.nic_params), each.key)
             )
         ].id
+    }
+
+    tags = {
+        source = "${local.env_name}_terraform"
     }
 }
 

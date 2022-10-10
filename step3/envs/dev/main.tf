@@ -35,11 +35,44 @@ module "network" {
 
 
 # 仮想マシンの作成
-module "vm" {
-  source = "../../modules/vm"
+# module "vm" {
+#   source = "../../modules/vm"
 
-  env = var.env            # 環境に関する情報をモジュールへ渡す
-  nic = module.network.nic # networkモジュールでoutputされた"nic"をvmモジュールへ渡す
+#   env = var.env            # 環境に関する情報をモジュールへ渡す
+#   nic = module.network.nic # networkモジュールでoutputされた"nic"をvmモジュールへ渡す
+# }
+
+
+# ネットワークセキュリティグループの作成
+module nsg{
+  source = "../../modules/network/nsg"
+  env = var.env
 }
 
 
+
+
+#####  デバッグ用  ############
+# 既存リソースの取得モジュール（デバッグ用）
+# module get_existing_resources{
+#   source = "../../modules/get_existing_resource"
+
+#   # 環境情報を読み込み
+#   env = var.env
+
+#   # 既存のリソースグループ内のリソースを取得したい場合
+#   rg_name = (var.exist.rg_name == "") ? "tf_${var.env.name}" : var.exist.rg_name 
+
+#   # 既存の仮想ネットワークを取得したい場合
+#   type = var.exist.type.nic
+
+#   # タグでフィルターしたい場合
+#   tag = {
+#     key    = var.exist.tag.key 
+#     value = var.exist.tag.value
+#   }
+# }
+
+# output exist_resource{
+#   value = module.get_existing_resources.resources[0].id
+# }

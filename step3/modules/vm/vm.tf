@@ -3,7 +3,7 @@ resource azurerm_windows_virtual_machine winvm{
 
     name = "${local.env_name}_${each.value.name}"
     computer_name = each.value.computer_name
-    resource_group_name = (each.value.rg_name == "")? local.env_params.rg_name : each.value.rg_name
+    resource_group_name = (each.value.rg_name == "") ? local.env_params.rg_name : each.value.rg_name
     location = local.env_params.location
     admin_username = each.value.admin_name
     admin_password = each.value.admin_password
