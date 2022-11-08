@@ -103,3 +103,41 @@ resource "azurerm_resource_group" "xxx" {
 
 
 - 既存のサブネットは```data azurerm_subnet```で取得する
+
+
+### 3-4
+**Todo**
+- 3-3までに作成した環境に対して、Terraformerを使ってリソース情報を吸い上げ
+- 全リソースが一つのtfファイルに吐き出されるので、モジュールに切り分けていく
+
+**メモ**
+- Terraformerのインストール
+  - go言語のインストール
+    - https://go.dev/dl/
+  - バイナリファイルをダウンロードしてリネーム
+    - https://github.com/GoogleCloudPlatform/terraformer/releases
+    - **mv .\terraformer-all-windows-amd64 .\terraformer.exe**
+  - PATHを通す
+    - Pathにフォルダを追加する
+    - ↑ terraformer.exeをダウンロードしたフォルダ
+  - **terraformer --version**で動作確認
+
+- usage
+  - import先となるディレクトリを作る
+  - import対象となるリソースのプロバイダー・バージョンファイルを作る
+    - azurerm, azureadなどはここで指定？ 
+
+```javascript:version.tf
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0.2"
+    }
+  }
+}
+```
+
+  - **terraformer import ~~~**を実行する
+    - azureはタグでの**--filter**が実装されてないっぽい
+    - filterする機能を実現するにはどうする？

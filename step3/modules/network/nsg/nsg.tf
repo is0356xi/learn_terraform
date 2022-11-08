@@ -57,6 +57,7 @@ module get_nic{
 resource azurerm_network_interface_security_group_association nic_nsg{
     count = length(azurerm_network_security_group.nsg)
 
-    network_interface_id      = module.get_nic.type_tag.resources[count.index].id
+    # network_interface_id      = module.get_nic.type_tag.resources[count.index].id
+    network_interface_id      = module.get_nic.resources.type_tag[count.index].id
     network_security_group_id = azurerm_network_security_group.nsg[count.index].id
 }
