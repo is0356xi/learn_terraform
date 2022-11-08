@@ -35,19 +35,19 @@ module "network" {
 
 
 # 仮想マシンの作成
-# module "vm" {
-#   source = "../../modules/vm"
+module "vm" {
+  source = "../../modules/vm"
 
-#   env = var.env            # 環境に関する情報をモジュールへ渡す
-#   nic = module.network.nic # networkモジュールでoutputされた"nic"をvmモジュールへ渡す
-# }
+  env = var.env            # 環境に関する情報をモジュールへ渡す
+  nic = module.network.nic # networkモジュールでoutputされた"nic"をvmモジュールへ渡す
+}
 
 
-# # ネットワークセキュリティグループの作成
-# module nsg{
-#   source = "../../modules/network/nsg"
-#   env = var.env
-# }
+# ネットワークセキュリティグループの作成
+module nsg{
+  source = "../../modules/network/nsg"
+  env = var.env
+}
 
 
 # # ユーザ定義ルートの作成
