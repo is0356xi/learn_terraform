@@ -141,3 +141,64 @@ terraform {
   - **terraformer import ~~~**を実行する
     - azureはタグでの**--filter**が実装されてないっぽい
     - filterする機能を実現するにはどうする？
+    - terraformer import azure -R <リソースグループ名> --path-pattern <インポート先のパス>でいけそう
+
+
+
+### 4-1
+**Todo**
+- terraformをaws環境に対応させる
+- VPC, subnet, EC2をAWSコンソールから作成
+- terraformerでimportし、コード化する(VPC×1, サブネット×2)
+
+**メモ**
+クレデンシャル情報の扱い３つ
+- ①環境変数に埋め込む
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
+
+- ②apply実行時に変数として渡す
+  - **.tfvarsの利用が推奨されている**
+
+```terraform.tfvars:python
+aws_access_key = "AKIAXXXXXXXXXXXXXXXXXX"
+aws_secret_key = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+```
+
+```providers.tf:python
+variable "aws_access_key" {}
+variable "aws_secret_key" {}
+
+provider "aws" {
+    access_key = "${var.aws_access_key}"
+    secret_key = "${var.aws_secret_key}"
+    region = "ap-northeast-1"
+}
+```
+- ③apply時に引数として指定する
+
+```:sh
+terraform apply \
+-var 'access_key=AKIAXXXXXXXXXXXXXXXXXX' \
+-var 'secret_key=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+```
+
+
+- terraformerコマンド
+  - aws cliの設定ファイルを作成
+    - ~/.aws/credentials
+    - ~/.aws/config
+  - 作成したファイルが読み込まれるようにterraformerコマンドを実行
+
+
+```sh:--profileオプションで設定ファイルを読み込み
+terraformer import aws -r='*' -f="Name=tags.Name;Value=<Nameタグの値>" --profile=<プロファイル名>
+```
+
+```sh:コマンド例
+# tf_testというNameタグが付いたリソースのみをimport
+# 各リソースを個別のtfファイルに吐き出してくれる
+
+terraformer import aws -r='*' -f="Name=tags.Name;Value=tf_test" --path-pattern=generated/resources/　--profile=dev
+```
+

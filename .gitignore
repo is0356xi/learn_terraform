@@ -3,7 +3,9 @@
 *.tfstate
 *.exe
 *.hcl
-step2/terraform.tfstate.json
+azure/step2/terraform.tfstate.json
 *.backup
 *.terraform
 *.info
+*.tfvars
+*generated*
