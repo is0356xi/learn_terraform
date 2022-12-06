@@ -8,8 +8,8 @@ resource "aws_subnet" "subnets" {
   enable_resource_name_dns_aaaa_record_on_launch = each.value.enable_resource_name_dns_aaaa_record_on_launch
   ipv6_native                                    = each.value.ipv6_native
   # map_customer_owned_ip_on_launch                = each.value.map_customer_owned_ip_on_launch
-  map_public_ip_on_launch                        = each.value.map_public_ip_on_launch
-  private_dns_hostname_type_on_launch            = each.value.private_dns_hostname_type_on_launch
+  map_public_ip_on_launch             = each.value.map_public_ip_on_launch
+  private_dns_hostname_type_on_launch = each.value.private_dns_hostname_type_on_launch
 
   vpc_id = var.created_vpc[each.value.association_vpc].id
 }

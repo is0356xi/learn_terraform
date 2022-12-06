@@ -6,4 +6,4 @@ main側から呼び出される際に指定された変数を受け取る
 variable "env_params" {}
 
 # IAMユーザのパラメータ
-variable user_params {}
+variable "user_params" {}
