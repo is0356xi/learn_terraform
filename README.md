@@ -202,3 +202,20 @@ terraformer import aws -r='*' -f="Name=tags.Name;Value=<Nameタグの値>" --pro
 terraformer import aws -r='*' -f="Name=tags.Name;Value=tf_test" --path-pattern=generated/resources/　--profile=dev
 ```
 
+### 4-2
+**Todo**
+- IAMユーザ・グループを作成し、ポリシーをアタッチ
+- ユーザのログイン情報をterraformで作成する
+  - keybaseを用いて、公開鍵暗号でパスワードやアクセスキーを暗号化
+  - tfstateに書き込まれるデータが暗号化される
+
+
+**メモ**
+- keybaseの環境構築
+  - ダウンロード：https://keybase.io/download
+  - ユーザを作成(keybase:に指定するユーザ名となる)
+  - PGPキーを生成 (公開鍵が作成され、keybaseに登録しているデバイスから復号化が可能に)
+  - [参考](https://qiita.com/ldr/items/427f6cf7ed14f4187cd2)
+
+- 復号化のコマンド
+  - keybase pgp decrypt -S <ユーザ名>

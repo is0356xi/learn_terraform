@@ -61,3 +61,30 @@ variable "subnet_params" {
     }
   }
 }
+
+# IAMユーザのパラメータ
+variable user_params {
+    default = {
+        user1 = {
+            name = "learn_cw_user1"
+            group = "learn_cloudwatch"
+        },
+        user2 = {
+            name = "learn_cw_user2"
+            group = "learn_cloudwatch"
+        }
+
+    }
+}
+
+# IAMグループのパラメータ
+variable group_params {
+    default = {
+        learn_cloudwatch = {
+            name = "learn_cloudwatch"
+            path = "/" # グループが作られる階層を指定する
+            policy = "CloudWatchReadOnly"
+        }
+    }
+}
+
