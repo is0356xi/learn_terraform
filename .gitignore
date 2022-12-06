@@ -9,3 +9,6 @@ azure/step2/terraform.tfstate.json
 *.info
 *.tfvars
 *generated*
+aws/step4/envs/dev/scripts/tmp.txt
+aws/step4/envs/dev/scripts/decoded_tmp.txt
+aws/step4/envs/dev/login_info.csv
