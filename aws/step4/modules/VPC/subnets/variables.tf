@@ -6,7 +6,7 @@ main側から呼び出される際に指定された変数を受け取る
 variable "env_params" {}
 
 # サブネットのパラメータ
-variable subnet_params {}
+variable "subnet_params" {}
 
 # 関連づけるVPCの情報
-variable created_vpc {}
+variable "created_vpc" {}

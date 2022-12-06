@@ -1,36 +1,42 @@
+locals {
+  version = "v1"
+}
+
+
 resource "aws_iam_group" "group" {
 
-for_each = var.group_params
-  name = each.value.name
+  for_each = var.group_params
+  # name     = each.value.name
+  name = "${local.version}_${each.value.name}"
   path = each.value.path
 }
 
 # グループにポリシーをアタッチ
-resource aws_iam_group_policy group_policy{
-    for_each = var.group_params
+resource "aws_iam_group_policy" "group_policy" {
+  for_each = var.group_params
 
-    name = "${each.value.name}_policy"
-    group = aws_iam_group.group[each.value.name].id
+  name  = "${local.version}_${each.value.name}_policy"
+  group = aws_iam_group.group[each.value.name].id
 
-    # mainから見た時の相対ファイルパス
-    policy = file("../../modules/Iam/policy/${each.value.policy}.json")
+  # mainから見た時の相対ファイルパス
+  policy = file("../../modules/Iam/policy/${each.value.policy}.json")
 }
 
 
 # グループにユーザを追加
-resource aws_iam_group_membership membership{
-    for_each = var.user_params
+resource "aws_iam_group_membership" "membership" {
+  for_each = var.user_params
 
-    # メンバーシップの名前
-    name = each.value.group
+  # メンバーシップの名前
+  name = "${local.version}_${each.value.group}"
 
-    # 追加するユーザ名のリスト
-    users = [
-        each.value.name
-    ]
+  # 追加するユーザ名のリスト
+  users = [
+    "${local.version}_${each.value.name}"
+  ]
 
-    # 追加先のグループID
-    group = aws_iam_group.group[each.value.group].id 
+  # 追加先のグループID
+  group = aws_iam_group.group[each.value.group].id
 
 }
 

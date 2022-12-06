@@ -2,7 +2,7 @@
 variable "env_params" {}
 
 # IAMグループのパラメータ
-variable group_params {}
+variable "group_params" {}
 
 # 作成済みのユーザ情報
-variable user_params{}
+variable "user_params" {}

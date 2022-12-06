@@ -219,3 +219,19 @@ terraformer import aws -r='*' -f="Name=tags.Name;Value=tf_test" --path-pattern=g
 
 - 復号化のコマンド
   - keybase pgp decrypt -S <ユーザ名>
+
+### 4-3
+**Todo**
+- EC2一台を作成
+- SNSの設定をコンソールから行う
+  - SNSトピックを作成
+  - サブスクライブし、メール通知を行えるよう設定
+- CloudWatchの設定をコンソールから行う
+  - アラーム：EC2のCPU使用率に応じてSNSトピックにメッセージを発行
+  - ダッシュボード：いくつかのメトリクスとアラームを可視化・保存
+  - イベント：EC2の状態変化をトリガーにSNSトピックにメッセージを発行
+- 上記リソースのCloudWatchダッシュボード以外をコード化
+
+**メモ**
+- EventBridgeからメールが来ない
+  - イベントの検知はできてそう
