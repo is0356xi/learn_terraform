@@ -1,6 +1,7 @@
 # terraform.tfvarsから読み込み
 variable "aws_access_key" {}
 variable "aws_secret_key" {}
+variable "keybase_user" {}
 
 # 環境固有の変数
 variable "env_params" {
@@ -26,6 +27,53 @@ variable "vpc_params" {
       enable_dns_support                   = "true"
       enable_network_address_usage_metrics = "false"
       instance_tenancy                     = "default"
+    }
+  }
+}
+
+# セキュリティグループのパラメータ
+variable "sg_params" {
+  default = {
+    sg1 = {
+      name        = "sg1"
+      description = "Allow Ping bound for EC2"
+      vpc_name    = "vpc1"
+      rules_ingress = {
+        allow_ping = {
+          from_port   = 8 # ICMPの場合は、Type番号を指定
+          to_port     = 0 # ICMPの場合は、Code番号を指定
+          protocol    = "ICMP"
+          cidr_blocks = ["0.0.0.0/0"]
+        }
+      }
+    },
+    sg2 = {
+      name        = "sg2"
+      description = "Allow Ping bound for EC2, Deny All SSH"
+      vpc_name    = "vpc1"
+      rules_ingress = {
+        allow_ping = {
+          from_port   = 8
+          to_port     = 0
+          protocol    = "ICMP"
+          cidr_blocks = ["0.0.0.0/0"]
+        },
+        deny_ssh = {
+          from_port   = 0
+          to_port     = 22
+          protocol    = "TCP"
+          cidr_blocks = ["0.0.0.0/0"]
+        }
+      }
+    }
+  }
+}
+
+# インターネットゲートウェイのパラメータ
+variable "igw_params" {
+  default = {
+    igw1 = {
+      association_vpc = "vpc1"
     }
   }
 }
@@ -61,6 +109,32 @@ variable "subnet_params" {
     }
   }
 }
+
+
+
+# ルートテーブルのパラメータ
+variable "route_table_params" {
+  default = {
+    routetable1 = {
+      name        = "routetable1"
+      vpc_name    = "vpc1"
+      subnet_name = "subnet1"
+      routes = {
+        to_internet_gateway = {
+          destination = "0.0.0.0/0"
+          type_dst    = "gateway"
+          next_hop    = "igw1"
+        },
+        to_ec2 = {
+          destination = "100.0.0.0/24"
+          type_dst    = "instance"
+          next_hop    = "cw_test_ec2"
+        }
+      }
+    }
+  }
+}
+
 
 # IAMユーザのパラメータ
 variable "user_params" {
@@ -116,22 +190,23 @@ variable "group_params" {
 variable "ec2_params" {
   default = {
     cw_test_ec2 = {
-      name               = "cw_test_ec2"
-      association_subnet = "subnet1"
-      ami                = "ami-072bfb8ae2c884cc4"
-      # availability_zone = "ap-northeast-1d"
-      instance_type = "t2.micro"
-      key_name      = "sakue103"
+      name                        = "cw_test_ec2"
+      subnet_name                 = "subnet1"
+      ami                         = "ami-072bfb8ae2c884cc4"
+      associate_public_ip_address = "true"
+      instance_type               = "t2.micro"
+      key_name                    = "sakue103"
+      security_group_names        = ["sg1", "sg2"]
     }
   }
 }
-
 
 # SNSトピックのパラメータ
 variable "topic_params" {
   default = {
     v1_cloudwatch_topic = {
       name                                     = "v1_cloudwatch_topic"
+      policy_name                              = "Add_SnsPublish_to_EventBridge"
       application_success_feedback_sample_rate = "0"
       content_based_deduplication              = "false"
       fifo_topic                               = "false"

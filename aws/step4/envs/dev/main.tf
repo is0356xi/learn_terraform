@@ -9,7 +9,6 @@ module <module名>{
 }
 */
 
-
 ######  network作成  ######
 
 module "vpc" {
@@ -17,6 +16,26 @@ module "vpc" {
   env_params = var.env_params
 
   vpc_params = var.vpc_params
+}
+
+module "sg" {
+  source     = "../../modules/VPC/securitygroups"
+  env_params = var.env_params
+
+  created_vpc = module.vpc.created_vpc
+  sg_params   = var.sg_params
+
+  depends_on = [module.vpc]
+}
+
+module "igw" {
+  source     = "../../modules/VPC/internetgateways"
+  env_params = var.env_params
+
+  created_vpc = module.vpc.created_vpc
+  igw_params  = var.igw_params
+
+  depends_on = [module.vpc]
 }
 
 module "subnet" {
@@ -30,12 +49,39 @@ module "subnet" {
 }
 
 
+/*
+ルートテーブルの作成
+１．ネクストホップとなる作成済みのリソース群を変数に格納
+２．ルートテーブルモジュールの呼び出し時に１の変数を渡す
+*/
+
+locals {
+  dst_resources = {
+    gateway  = module.igw.created_igw,
+    instance = module.ec2_instance.created_instance
+  }
+}
+
+
+module "routetable" {
+  source     = "../../modules/VPC/routetables"
+  env_params = var.env_params
+
+  created_vpc        = module.vpc.created_vpc
+  created_subnet     = module.subnet.created_subnet
+  dst_resources      = local.dst_resources
+  route_table_params = var.route_table_params
+
+  depends_on = [module.igw, module.ec2_instance, module.subnet]
+}
+
 # ######  IAM関連リソースの作成  ######
 module "iam_user" {
   source     = "../../modules/IAM/users"
   env_params = var.env_params
 
-  user_params = var.user_params
+  user_params  = var.user_params
+  keybase_user = var.keybase_user
 }
 
 module "iam_group" {
@@ -66,10 +112,10 @@ module "ec2_instance" {
   env_params = var.env_params
 
   created_subnet = module.subnet.created_subnet
+  created_sg     = module.sg.created_sg
+  ec2_params     = var.ec2_params
 
-  ec2_params = var.ec2_params
-
-  depends_on = [module.subnet]
+  depends_on = [module.subnet, module.sg]
 }
 
 ##### SNS #####
@@ -121,7 +167,7 @@ output "debug" {
   value = {
     # created_vpc = module.vpc.created_vpc,
     # created_subnet = module.subnet.created_subnet
-    created_instance = module.ec2_instance.created_instance
+    # created_instance = module.ec2_instance.created_instance
     # created_iam_group = module.iam_group.created_iam_group
     # created_iam_user = module.iam_user.created_iam_user
     # creted_topic = module.sns_topic.created_topic

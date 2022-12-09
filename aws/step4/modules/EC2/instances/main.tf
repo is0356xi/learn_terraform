@@ -2,7 +2,7 @@ resource "aws_instance" "instance" {
   for_each = var.ec2_params
 
   ami                         = each.value.ami
-  associate_public_ip_address = "false"
+  associate_public_ip_address = each.value.associate_public_ip_address
   #   availability_zone           = each.value.availability_zone
 
   capacity_reservation_specification {
@@ -60,8 +60,15 @@ resource "aws_instance" "instance" {
   }
 
   source_dest_check = "true"
-  subnet_id         = var.created_subnet[each.value.association_subnet].id
+  subnet_id         = var.created_subnet[each.value.subnet_name].id
+
 
   tenancy = "default"
-  #   vpc_security_group_ids = ["sg-0b23da7c01a2d645f"]
+  /*
+  security_group_namasに含まれるSG名をキーとして、作成済みSGからidを取得
+  ・三項演算子を使用  [for 変数名 in リスト: 変数名を使った処理] → 処理後の値がリストに格納されていく
+  */
+  vpc_security_group_ids = [
+    for sg_name in each.value.security_group_names : var.created_sg[sg_name].id
+  ]
 }

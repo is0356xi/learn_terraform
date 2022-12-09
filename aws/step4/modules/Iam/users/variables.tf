@@ -7,3 +7,6 @@ variable "env_params" {}
 
 # IAMユーザのパラメータ
 variable "user_params" {}
+
+# KeyBaseのユーザ名
+variable "keybase_user" {}
