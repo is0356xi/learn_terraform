@@ -1,0 +1,10 @@
+# AWS環境へのアクセス許可
+aws_access_key = ""
+aws_secret_key = ""
+
+# SNSトピック サブスクリプションのエンドポイント
+endpoints = {
+  "topic_name" : "endpoint(e-mail, sqs, etc)"
+}
+
+keybase_user = "keybase_user_name"

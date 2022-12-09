@@ -144,6 +144,7 @@ terraform {
     - terraformer import azure -R <リソースグループ名> --path-pattern <インポート先のパス>でいけそう
 
 
+# Step4 AWS
 
 ### 4-1
 **Todo**
@@ -234,4 +235,110 @@ terraformer import aws -r='*' -f="Name=tags.Name;Value=tf_test" --path-pattern=g
 
 **メモ**
 - EventBridgeからメールが来ない
-  - イベントの検知はできてそう
+  - イベントの検知はできてそう→トピックのアクセスポリシーが足りない
+  - トピックに対して、aws.events.comからのアクセスを許可するポリシーが必要
+
+
+### 4-4
+**Todo**
+- keybaseのユーザ名をtfvasrから読み込むようにする
+- EC2に対して、Pingのための設定を追加
+  - セキュリティグループでICMPを許可する
+  - ルートテーブルを追加
+- VPCにインターネットゲートウェイをアタッチする
+- SNSトピックにポリシーを追加
+  - EventBridgeからのパブリッシュを許可する
+
+**メモ**
+- セキュリティグループの作成・アタッチについて
+  - セキュリティグループはVPC単位で管理されている
+  - 手順1: VPC_IDを指定してセキュリティグループを作成
+  - 手順2: EC2などのリソース作成時に、セキュリティグループのIDを指定
+
+
+- セキュリティグループでpingを許可する時
+  - from_portにICMPタイプ番号を指定
+  - to_portにICMPコード番号を指定
+  - エコー要求を許可する時は
+    - ```from_port=8,  to_port=0```となる。
+
+- dynamicを使った二重ループ
+  - 多重階層の変数をループで回す方法
+    - https://developer.hashicorp.com/terraform/language/expressions/dynamic-blocks
+  - ~~for_eachでリソースを作成する時は、Dynamic使えない？~~
+    - length-countで作成する際は、通常のdynamicの使い方でいける←azurermの時だけかも？
+    - awsの方は、for_eachでSGリソース作成時、その中でDynamic構文を使ってrule作成できた。
+
+
+- routetableのルートの指定方法は二種類
+  - オブジェクトを指定
+    - route{}
+    - dynamic構文で複数のルートを指定可能
+  - オブジェクトのリストを指定
+    - [{cidr_block=xxxxx, gateway_id=yyyy}]
+    - https://developer.hashicorp.com/terraform/language/attr-as-blocks
+
+
+- routetableのnext_hopの指定方法
+  - [aws_route_tableの属性値](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table)
+    - vpc_id
+    - route{}
+      - cidr_block/ipv6_cidr_block/destination_prefix_list_id
+      - gateway_id/instance_id/vpc_endpoint_idなど
+  - ネクストホップの種類が複数ある
+    - gateway_id, instance_id, vpc_endpoint_idなど  
+    - dynamicでroute{}を複数作る際、ネクストホップの種類によってcontentの属性を変える必要がある。
+      - nexthopがIGWの場合 → gateway_id = xxxxx
+      - nexthopがEC2の場合 → incstace_id = yyyyy
+  - 三項演算子&nullを指定することで、動的に属性値を指定する。
+
+```js:
+# 変数の定義例
+variable "route_table_params" {
+  default = {
+    routetable1 = {
+      routes = {
+        to_internet_gateway = {
+          destination = "0.0.0.0/0"
+          type_dst    = "gateway"
+          next_hop    = "igw1"
+        },
+        to_ec2 = {
+          destination = "100.0.0.0/24"
+          type_dst    = "instance"
+          next_hop    = "cw_test_ec2"
+        }
+      }
+    }
+  }
+}
+
+variable dst_resources {
+  default = {
+    gateway  = ＜作成済みIGWのオブジェクト＞  
+    instance = ＜作成済みEC2のオブジェクト＞
+  }
+}
+
+# aws_route_tableブロックの中の、dynamic構文の例
+dynamic "route" {
+    for_each = var.route_table_params.routes
+    content {
+      cidr_block = route.value.destination
+
+      # type_dstによって、next_hopの種類を判定する
+      gateway_id  = route.value.type_dst == "gateway" ? var.dst_resources["gateway"][route.value.next_hop].id : null
+      instance_id = route.value.type_dst == "instance" ? var.dst_resources["instance"][route.value.next_hop].id : null
+    }
+  }
+```
+
+
+- SNSトピックに対して、EventsBridgeがパブリッシュできるようにする
+  - トピックにアタッチされているポリシーにstatementを追加する必要がある
+  - １．一度トピックを作成する
+  - ２．トピックにアタッチされたポリシーをコピーしてjsonファイルに保存
+  - ３．jsonファイルをfile()で読み込んでSNSトピックに割り当てるterraformコードを書く
+    - a.file()で読み込み、jsondecode()で辞書型にする
+    - ```b.アカウントIDやトピックARNなどを変数から読み込みように修正[(参考)](https://qiita.com/mj69/items/66e841f27c4771738bfd)```
+    - c.EventsBridgeがパブリッシュするためのstatement{}を**b**に追加
