@@ -340,5 +340,5 @@ dynamic "route" {
   - ２．トピックにアタッチされたポリシーをコピーしてjsonファイルに保存
   - ３．jsonファイルをfile()で読み込んでSNSトピックに割り当てるterraformコードを書く
     - a.file()で読み込み、jsondecode()で辞書型にする
-    - ```b.アカウントIDやトピックARNなどを変数から読み込みように修正[(参考)](https://qiita.com/mj69/items/66e841f27c4771738bfd)```
+    - ```b.アカウントIDやトピックARNなどを変数から読み込みように修正[参考](https://qiita.com/mj69/items/66e841f27c4771738bfd)```
     - c.EventsBridgeがパブリッシュするためのstatement{}を**b**に追加
