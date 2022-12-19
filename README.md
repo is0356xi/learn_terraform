@@ -342,3 +342,20 @@ dynamic "route" {
     - a.file()で読み込み、jsondecode()で辞書型にする
     - b.アカウントIDやトピックARNなどを変数から読み込みように修正 [参考](https://qiita.com/mj69/items/66e841f27c4771738bfd)
     - c.EventsBridgeがパブリッシュするためのstatement{}を**b**に追加
+
+# Step5
+IAMユーザ・グループ・ポリシーなどを管理する
+
+## 5-1
+**Todo**
+- ユーザ・グループを作成
+- グループにポリシーをアタッチ
+- tfvarsでユーザを管理？jsonで管理？
+
+**メモ**
+- ユーザの情報はなにで管理するのがベストか？
+  - csvファイルに【ユーザ名・グループ名・適用ポリシー名】を記載
+  - pythonスクリプトで辞書型に変換し、ファイル出力
+  - terraform apply -var-fileの引数にファイルを指定 
+    - [参考 apply](https://developer.hashicorp.com/terraform/language/values/variables)
+    - [参考 powershell](https://qiita.com/opengl-8080/items/bb0f5e4f1c7ce045cc57)

@@ -1,0 +1,4 @@
+user_name, group, policy
+admin1,administrators,administrator
+admin2,administrators,administrator
+developer1,developers,developer
