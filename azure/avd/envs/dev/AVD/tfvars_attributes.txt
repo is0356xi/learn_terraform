@@ -1,0 +1,10 @@
+dc_admin_params = {
+    "domain_name" : <>
+    "user_principal_name": <>,
+    "password": <>
+}
+
+avd_local_admin_params = {
+    "user_name" : <>,
+    "password" : <>
+}
