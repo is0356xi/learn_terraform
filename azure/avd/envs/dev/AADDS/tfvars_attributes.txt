@@ -1,0 +1,4 @@
+dc_admin_params = {
+    "user_principal_name": <>,
+    "password": <>
+}

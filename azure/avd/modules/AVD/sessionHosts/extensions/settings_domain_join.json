@@ -1,0 +1,7 @@
+{
+    "Name": "${domain_name}",
+    "OUPath": "${ou_path}",
+    "User": "${domain_admin}",
+    "Restart": "true",
+    "Options": "3"
+}

@@ -12,3 +12,5 @@ azure/step2/terraform.tfstate.json
 *tmp.txt
 *decoded_tmp.txt
 *login_info.csv
+azure/avd/envs/dev/AVD/avd_users.json
+azure/avd/envs/dev/AVD/avd_users.csv

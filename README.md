@@ -356,6 +356,7 @@ IAMユーザ・グループ・ポリシーなどを管理する
 - ユーザの情報はなにで管理するのがベストか？
   - csvファイルに【ユーザ名・グループ名・適用ポリシー名】を記載
   - pythonスクリプトで辞書型に変換し、ファイル出力
-  - terraform apply -var-fileの引数にファイルを指定 
+  - ~~terraform apply -var-fileの引数にファイルを指定~~ → csvからjsonに変換し、main.tfのlocalsで読み込みのがいいかも
+    - ```xxx = jsondecode(file(~~~.json))```
     - [参考 apply](https://developer.hashicorp.com/terraform/language/values/variables)
     - [参考 powershell](https://qiita.com/opengl-8080/items/bb0f5e4f1c7ce045cc57)

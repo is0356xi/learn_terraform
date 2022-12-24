@@ -1,0 +1,5 @@
+user_principal_name, display_name, password, group
+<upn>, tanaka, <passwd>, wl_xx
+<upn>, sasaki, <passwd>, wl_xx
+<upn>, haneda, <passwd>, wl_yy
+<upn>, morita, <passwd>, wl_yy
