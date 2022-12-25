@@ -7,7 +7,7 @@ variable "env_params" {
   default = {
     name                = "dev"
     location            = "eastus"
-    resource_group_name = "aadds-rg"
+    resource_group_name = "avd-rg"
     tag = {
       Name = "from_tf"
     }

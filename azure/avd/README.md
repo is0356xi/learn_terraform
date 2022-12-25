@@ -111,3 +111,31 @@ az login --scope https://graph.microsoft.com/.default
 - パスワードが要件を満たしていない？
   - https://support.logmeininc.com/pro/help/how-do-i-resolve-error-1909-when-trying-to-log-into-a-computer
   - 大文字・小文字・記号・数字で12文字にしてみる。→ **解決**
+
+
+### Error Code 1326 & 1909
+- 環境を一度全て消し、再デプロイしてみたところ以下のエラーが発生
+
+```json:
+{
+    "code": "ComponentStatus/JoinDomainException for Option 3 meaning 'User Specified'/failed/1",
+    "level": "Error",
+    "displayStatus": "Provisioning failed",
+    "message": "ERROR - Failed to join domain='avd.dev', ou='', user='dc_admin@sa5ku3e8gmail.onmicrosoft.com', option='NetSetupJoinDomain, NetSetupAcctCreate' (#3 meaning 'User Specified'). Error code 1326"
+},
+{
+    "code": "ComponentStatus/JoinDomainException for Option 1 meaning 'User Specified without NetSetupAcctCreate'/failed/1",
+    "level": "Error",
+    "displayStatus": "Provisioning failed",
+    "message": "ERROR - Failed to join domain='avd.dev', ou='', user='dc_admin@sa5ku3e8gmail.onmicrosoft.com', option='NetSetupJoinDomain' (#1 meaning 'User Specified without NetSetupAcctCreate'). Error code 1909"
+}
+```
+
+- パスワードに起因していると思われるため、AADDS管理者のパスワードを変更してみる
+  - 上記エラー上段のエラーコードが```1326から1909に変化```
+    - パスワードの変更点が少ないのが原因？ **Sを5に変更したので似たような同じ文字列だからNG?**
+    - パスワード変更がAADDS側に同期されていない？ **AAD側で変更してから少し時間がかかる？**
+
+- 30分ほど待ってから、もう一度試してみる
+  - ~~それでエラーコードが変わらないなら、パスワードを全く別の文字列に変更してみる。~~
+  - ```少し待ってから再実行したらドメイン参加できた。```

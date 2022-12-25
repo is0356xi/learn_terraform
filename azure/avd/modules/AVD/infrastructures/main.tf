@@ -20,6 +20,7 @@ resource "azurerm_virtual_desktop_host_pool" "host_pool" {
   load_balancer_type       = each.value.load_balancer_type
 }
 
+# ホストプール用のトークンを発行
 resource "azurerm_virtual_desktop_host_pool_registration_info" "registration" {
   for_each = azurerm_virtual_desktop_host_pool.host_pool
 
@@ -38,7 +39,8 @@ resource "azurerm_virtual_desktop_application_group" "dag" {
   type         = each.value.type
   host_pool_id = azurerm_virtual_desktop_host_pool.host_pool[each.value.host_pool_name].id
 
-  depends_on = [azurerm_virtual_desktop_host_pool.host_pool,
+  depends_on = [
+    azurerm_virtual_desktop_host_pool.host_pool,
     azurerm_virtual_desktop_workspace.workspace
   ]
 }

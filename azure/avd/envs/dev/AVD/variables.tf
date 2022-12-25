@@ -7,7 +7,7 @@ variable "env_params" {
   default = {
     name                = "dev"
     location            = "eastus"
-    resource_group_name = "aadds-rg"
+    resource_group_name = "avd-rg"
     tag = {
       Name = "from_tf"
     }
@@ -91,7 +91,7 @@ variable "avd_infrastructure_params" {
       },
     }
 
-    rfc3339 = "2022-12-24T16:00:00Z"
+    rfc3339 = "2022-12-25T16:00:00Z"
 
 
     # アプリケーショングループのパラメータ
