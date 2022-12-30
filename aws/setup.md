@@ -55,3 +55,10 @@ output=json
 
 - 設定ファイルの読み込み
   - ```aws configure --profile <プロファイル名>```を実行
+
+
+# keybaseの環境構築
+- ダウンロード：https://keybase.io/download
+- ユーザを作成(keybase:に指定するユーザ名となる)
+- PGPキーを生成 (公開鍵が作成され、keybaseに登録しているデバイスから復号化が可能に)
+- [参考](https://qiita.com/ldr/items/427f6cf7ed14f4187cd2)
