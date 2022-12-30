@@ -360,3 +360,51 @@ IAMユーザ・グループ・ポリシーなどを管理する
     - ```xxx = jsondecode(file(~~~.json))```
     - [参考 apply](https://developer.hashicorp.com/terraform/language/values/variables)
     - [参考 powershell](https://qiita.com/opengl-8080/items/bb0f5e4f1c7ce045cc57)
+
+
+## 5-1修正
+**Todo**
+- IAMユーザにはカスタムポリシー・グループには組み込みポリシーをアタッチする
+  - カスタムポリシーがない場合はグループのポリシーを継承する
+  - グループポリシーはdataブロックを用いてnameベースで取得する
+- ユーザリストのCSVファイルをjsonファイルに変換
+  - main.tfにて、```jsondecode(file(~~.json))```で読み込み
+
+**参考**
+- カスタムポリシー作成時のリスト内包表記 (?)
+  - ユーザリストCSVのcustom_policyがnullではないユーザを取得
+  - https://kiririmode.hatenablog.jp/entry/20200503/1588483571
+
+```python:
+var.user_params = {
+  "admin": {
+        "custom_policy": "null",
+        "group": "admins",
+        "name": "admin"
+    },
+    "developer": {
+        "custom_policy": "developer",
+        "group": "devs",
+        "name": "dev"
+    }
+}
+
+custom_policy_users = { 
+  for key, value in var.user_params :  
+    key => value if value.custom_policy != "null" 
+}
+
+# ↑の補足
+# key="admin" value={"custom_policy": "null", "group": "", ...}
+# custom_policyがnullの場合、{key=value}を生成 
+
+# ↓結果
+custom_policy_users = {
+  "developer": {
+        "custom_policy": "developer",
+        "group": "devs",
+        "name": "dev"
+    }
+}
+
+```

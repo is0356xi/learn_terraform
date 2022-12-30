@@ -20,8 +20,8 @@ def get_login_info(json_data):
     
 
 def decrypt(cipher_text, keybase_user):
-    tmp_file = "../scripts/tmp.txt"
-    decoded_file = "../scripts/decoded_tmp.txt"
+    tmp_file = "../../scripts/tmp.txt"
+    decoded_file = "../../scripts/decoded_tmp.txt"
 
     # 一時的に暗号文をテキストファイルに書き出し
     with open(tmp_file, 'w')as f:
@@ -47,7 +47,6 @@ def write_file(data):
 
 
 def main():
-    
     # tfstateからデータを読み込み
     json_data = read_file()
 

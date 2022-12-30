@@ -10,41 +10,24 @@ variable "env_params" {
     tag = {
       Name = "dev"
     }
+    module_path = "../../modules"
   }
 }
 
 
 ##### IAM #####
-# IAMユーザのパラメータ
-variable "user_params" {
-  # default = {
-  #   admin1 = {
-  #     name  = "admin1"
-  #     group = "administrators"
-  #   },
-  #   admiin2 = {
-  #     name  = "admiin2"
-  #     group = "administrators"
-  #   },
-  #   developer1 = {
-  #     name  = "developer1"
-  #     group = "developers"
-  #   }
-  # }
-}
-
 # IAMグループのパラメータ
 variable "group_params" {
   default = {
     administrators = {
-      name   = "administrators"
-      path   = "/"
-      policy = "administrator"
+      name        = "administrators"
+      path        = "/"
+      policy_name = "AdministratorAccess"
     },
     developers = {
-      name   = "developers"
-      path   = "/"
-      policy = "developer"
+      name        = "developers"
+      path        = "/"
+      policy_name = "PowerUserAccess"
     }
   }
 }
