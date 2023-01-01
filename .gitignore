@@ -17,3 +17,11 @@ azure/avd/envs/dev/AVD/avd_users.csv
 *tmp.txt
 *decoded_tmp.txt
 *login_info.csv
+aws/config/role_json/lambda_to_config_assume.json
+*.pyc
+
+aws/config/samples*
+aws/config/role_json*
+*.zip
+aws/config/test-res.json
+
